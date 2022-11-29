@@ -1,8 +1,21 @@
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_OPENCV -std=c++0x")
 
 # Detect the preprocessor directives which are set by the compiler.
-execute_process(COMMAND ${CMAKE_CXX_COMPILER} -march=native -dM -E -x c /dev/null
-                OUTPUT_VARIABLE PREPROCESSOR_DIRECTIVES)
+  if(ANDROID_NREAL)
+  if (ANDROID_ABI MATCHES "arm64-v8a")
+    execute_process(COMMAND ${CMAKE_CXX_COMPILER} --target=armv8a -dM -E -x c /dev/null
+            OUTPUT_VARIABLE PREPROCESSOR_DIRECTIVES)
+  elseif(ANDROID_ABI MATCHES "armeabi-v7a")
+    execute_process(COMMAND ${CMAKE_CXX_COMPILER} --target=armv7 -dM -E -x c /dev/null
+            OUTPUT_VARIABLE PREPROCESSOR_DIRECTIVES)
+  else()
+    execute_process(COMMAND ${CMAKE_CXX_COMPILER} -march=native -dM -E -x c /dev/null
+            OUTPUT_VARIABLE PREPROCESSOR_DIRECTIVES)
+  endif()
+else()
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -march=native -dM -E -x c /dev/null
+          OUTPUT_VARIABLE PREPROCESSOR_DIRECTIVES)
+endif()
 
 set(IS_SSE_ENABLED FALSE)
 set(IS_NEON_ENABLED FALSE)

@@ -4,7 +4,13 @@ include(CheckIncludeFileCXX)
 project(brisk)
 
 find_package(catkin_simple REQUIRED)
-catkin_simple(ALL_DEPS_REQUIRED)
+
+if(ANDROID_NINEBOT)
+  catkin_simple()
+else()
+  find_package(roscpp REQUIRED)
+  catkin_simple(ALL_DEPS_REQUIRED)
+endif()
 
 include_directories(${CATKIN_DEVEL_PREFIX}/include)
 
@@ -40,7 +46,7 @@ else()
   message(WARNING "Neon instructions not implemented for ethzasl_brisk.")
 endif()
 
-
+if(NOT ANDROID_NREAL)
 # Testing.
 ##########
 enable_testing()
@@ -90,6 +96,7 @@ catkin_add_gtest(test_serialization src/test/test-serialization.cc
 target_link_libraries(test_serialization ${GLOG_LIBRARY}
                                          ${PROJECT_NAME}
                                          ${PROJECT_NAME}_test_lib)
+endif()
 
 cs_export()
 cs_install()

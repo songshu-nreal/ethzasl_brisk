@@ -2,11 +2,16 @@ cmake_minimum_required(VERSION 2.8.3)
 project(agast)
 
 find_package(catkin_simple REQUIRED)
+
+if(NOT ANDROID_NREAL)
+  find_package(roscpp REQUIRED)
+endif()
+
 catkin_simple()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   # Disable -Werror on clang.
-  add_definitions(-Wextra -Wall -pedantic -DHAVE_OPENCV -std=c++11)
+  add_definitions(-Wextra -Wall -pedantic -DHAVE_OPENCV -std=c++14)
 else()
   add_definitions(-Wextra -Wall -Werror -pedantic -DHAVE_OPENCV -std=c++0x)
 endif()
