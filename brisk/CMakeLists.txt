@@ -5,7 +5,7 @@ project(brisk)
 
 find_package(catkin_simple REQUIRED)
 
-if(ANDROID_NINEBOT)
+if(ANDROID_NREAL)
   catkin_simple()
 else()
   find_package(roscpp REQUIRED)
